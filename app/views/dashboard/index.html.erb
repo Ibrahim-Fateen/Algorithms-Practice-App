@@ -1,0 +1,26 @@
+<div class="space-y-6">
+  <h1 class="text-3xl font-bold">Your Dashboard</h1>
+
+  <div class="grid gap-6 md:grid-cols-2">
+    <div class="bg-white rounded-lg p-6 shadow">
+      <h2 class="text-xl font-semibold mb-4">Your Stats</h2>
+      <div>Problems Solved: <%= @solved_problems %></div>
+    </div>
+
+    <div class="bg-white rounded-lg p-6 shadow">
+      <h2 class="text-xl font-semibold mb-4">Recent Submissions</h2>
+      <div class="space-y-4">
+        <% @submissions.each do |submission| %>
+          <div class="border-b pb-4">
+            <div class="font-medium"><%= submission.problem.title %></div>
+            <div class="text-sm text-gray-500">
+              Status: <%= submission.status %>
+              <span class="mx-2">•</span>
+              <%= time_ago_in_words(submission.created_at) %> ago
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,11 @@
+<div class="text-center py-12">
+  <h1 class="text-4xl font-bold mb-4">Welcome to Algorithm Practice</h1>
+  <p class="text-xl mb-8">Improve your coding skills with weekly algorithm challenges</p>
+
+  <% unless user_signed_in? %>
+    <div class="space-x-4">
+      <%= link_to 'Get Started', new_user_registration_path,
+                  class: "bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600" %>
+    </div>
+  <% end %>
+</div>

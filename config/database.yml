@@ -1,0 +1,22 @@
+# config/database.yml
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  username: ibrahim  # Change this if your PostgreSQL username is different
+  password:          # Add your PostgreSQL password if you have one
+  host: localhost    # Default PostgreSQL host
+
+development:
+  <<: *default
+  database: orange_team_algorithms_development
+
+test:
+  <<: *default
+  database: orange_team_algorithms_test
+
+production:
+  <<: *default
+  database: orange_team_algorithms_production
+  username: <%= ENV["ORANGE_TEAM_ALGORITHMS_DATABASE_USERNAME"] %>
+  password: <%= ENV["ORANGE_TEAM_ALGORITHMS_DATABASE_PASSWORD"] %>

@@ -1,0 +1,51 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS (and SCSS, if configured) file within this directory, lib/assets/stylesheets, or any plugin's
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ */
+
+/*.editor-wrapper {*/
+/*    height: 400px;*/
+/*    border: 1px solid #ccc;*/
+/*    border-radius: 4px;*/
+/*    margin-bottom: 1rem;*/
+/*}*/
+
+/*.editor-wrapper .cm-editor {*/
+/*    height: 100%;*/
+/*}*/
+
+/*.editor-wrapper .cm-scroller {*/
+/*    overflow: auto;*/
+/*}*/
+
+/*!* Optional: Add some styling for the theme *!*/
+/*.editor-wrapper .cm-editor {*/
+/*    background-color: #282c34;*/
+/*}*/
+
+/*.editor-wrapper .cm-content {*/
+/*    font-family: monospace;*/
+/*}*/
+
+
+.CodeMirror {
+    height: 400px !important;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.CodeMirror-scroll {
+    min-height: 400px;
+}

@@ -1,0 +1,114 @@
+<div class="min-h-screen bg-gray-50 py-8">
+  <div class="container mx-auto px-4">
+    <%# Week Selection Header %>
+    <div class="mb-8 bg-white rounded-lg shadow-md p-6">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+        <div class="mb-4 md:mb-0">
+          <h1 class="text-2xl font-bold text-gray-900"><%= @current_week.theme %></h1>
+<!--          <p class="mt-1 text-sm text-gray-500"><%#= @current_week.description %></p>-->
+        </div>
+
+        <div class="relative">
+          <select
+            id="week-selector"
+            class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 rounded-md"
+            data-controller="week-selector"
+          >
+            <% @weeks.each do |week| %>
+              <option
+                value="<%= problems_path(week_id: week.id) %>"
+                <%= 'selected' if week.id == @current_week.id %>
+              >
+                <%= week.theme %>
+              </option>
+            <% end %>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <%# Problems Grid %>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% @problems.each do |problem| %>
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+          <div class="p-6">
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="text-xl font-semibold text-gray-900"><%= problem.title %></h2>
+              <span class="px-3 py-1 text-sm rounded-full
+                         <%= case problem.difficulty
+                             when 'Easy'
+                               'bg-green-100 text-green-800'
+                             when 'Medium'
+                               'bg-yellow-100 text-yellow-800'
+                             when 'Hard'
+                               'bg-red-100 text-red-800'
+                             end %>">
+                <%= problem.difficulty %>
+              </span>
+            </div>
+
+            <p class="text-gray-600 mb-4 line-clamp-3">
+              <%= problem.description %>
+            </p>
+
+            <%# Problem Stats %>
+            <div class="flex items-center text-sm text-gray-500 mb-4">
+              <div class="flex items-center mr-4">
+                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                </svg>
+                <%= problem.submissions.count %> submissions
+              </div>
+              <div class="flex items-center">
+                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+                </svg>
+                <%= problem.submissions.where(status: 'passed').count %> solved
+              </div>
+            </div>
+
+            <%# User's Status %>
+            <% user_submission = current_user.submissions.where(problem: problem).order(created_at: :desc).first %>
+            <div class="flex items-center justify-between">
+              <div>
+                <% if user_submission %>
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                             <%= case user_submission.status
+                                 when 'passed'
+                                   'bg-green-100 text-green-800'
+                                 when 'failed'
+                                   'bg-red-100 text-red-800'
+                                 else
+                                   'bg-gray-100 text-gray-800'
+                                 end %>">
+                    <%= user_submission.status.capitalize %>
+                  </span>
+                <% else %>
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                    Not attempted
+                  </span>
+                <% end %>
+              </div>
+
+              <%= link_to new_problem_submission_path(problem), class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" do %>
+                <%= user_submission ? "Try Again" : "Solve" %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<%# JavaScript for handling week selection %>
+<%= javascript_tag do %>
+  document.addEventListener('turbo:load', () => {
+    const weekSelector = document.getElementById('week-selector')
+    if (weekSelector) {
+      weekSelector.addEventListener('change', (event) => {
+        window.location.href = event.target.value
+      })
+    }
+  })
+<% end %>

@@ -1,0 +1,42 @@
+<div class="container mx-auto px-4 py-8">
+  <div class="mb-8">
+    <h1 class="text-2xl font-bold mb-4"><%= @problem.title %></h1>
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+      <h2 class="text-xl font-semibold mb-4">Problem Description</h2>
+      <div class="prose">
+        <%= @problem.description %>
+      </div>
+    </div>
+  </div>
+
+  <%= form_with(model: [@problem, @submission], local: true) do |f| %>
+    <div class="bg-white rounded-lg shadow p-6">
+      <%= f.text_area :code,
+                      id: 'code-editor',
+                      value: @submission.code || @problem.template_code %>
+
+      <div class="mt-4">
+        <%= f.submit 'Submit Solution',
+                     class: 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' %>
+      </div>
+    </div>
+  <% end %>
+
+  <% if @problem.hints.any? %>
+    <div class="mt-8">
+      <h2 class="text-xl font-semibold mb-4">Hints</h2>
+      <div class="space-y-4">
+        <% @problem.hints.ordered.each do |hint| %>
+          <div class="bg-white rounded-lg shadow-md p-4">
+            <details>
+              <summary class="font-medium cursor-pointer">Hint <%= hint.order_number %></summary>
+              <div class="mt-2 prose">
+                <%= hint.content %>
+              </div>
+            </details>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>

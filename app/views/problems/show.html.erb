@@ -1,0 +1,23 @@
+<div class="space-y-6">
+  <h1 class="text-3xl font-bold"><%= @problem.title %></h1>
+
+  <div class="bg-white rounded-lg p-6 shadow">
+    <div class="prose max-w-none">
+      <%= @problem.description %>
+    </div>
+  </div>
+
+  <%= form_with(model: [@problem, @submission], local: true) do |f| %>
+    <div class="bg-white rounded-lg shadow p-6">
+      <%= f.text_area :code,
+                      id: 'code-editor',
+                      class: 'hidden',
+                      value: @submission.code || @problem.template_code %>
+
+      <div class="mt-4">
+        <%= f.submit 'Submit Solution',
+                     class: 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' %>
+      </div>
+    </div>
+  <% end %>
+</div>
