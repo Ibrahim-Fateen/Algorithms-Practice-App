@@ -1,0 +1,99 @@
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold mb-6"><%= @problem.new_record? ? 'Create Problem' : 'Edit Problem' %></h1>
+
+  <%= form_with(model: [:admin, @problem], local: true, class: 'space-y-6') do |form| %>
+    <div class="grid md:grid-cols-2 gap-6">
+      <div>
+        <h3 class="text-xl font-semibold mb-4">Problem Details</h3>
+        <div class="mb-4">
+          <%= form.label :title, class: 'block mb-2' %>
+          <%= form.text_field :title, class: 'w-full px-3 py-2 border rounded' %>
+        </div>
+
+        <div class="mb-4">
+          <%= form.label :description, class: 'block mb-2' %>
+          <%= form.text_area :description, class: 'w-full px-3 py-2 border rounded', rows: 5 %>
+        </div>
+
+        <div class="mb-4">
+          <%= form.label :difficulty, class: 'block mb-2' %>
+          <%= form.select :difficulty, Problem.difficulties.keys, {}, class: 'w-full px-3 py-2 border rounded' %>
+        </div>
+
+        <div class="mb-4">
+          <%= form.label :week_id, 'Week', class: 'block mb-2' %>
+          <%= form.collection_select :week_id, Week.all, :id, :number, {}, class: 'w-full px-3 py-2 border rounded' %>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-xl font-semibold mb-4">Problem Code</h3>
+        <div class="mb-4">
+          <%= form.label :template_code, class: 'block mb-2' %>
+          <%= form.text_area :template_code, class: 'code-editor', rows: 5 %>
+        </div>
+
+        <div class="mb-4">
+          <%= form.label :stress_test_code, class: 'block mb-2' %>
+          <%= form.text_area :stress_test_code, class: 'code-editor', rows: 5 %>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6">
+      <div>
+        <h3 class="text-xl font-semibold mb-4">Test Cases</h3>
+        <%= form.fields_for :test_cases do |test_case_form| %>
+          <div class="mb-4">
+            <%= test_case_form.label :input, class: 'block mb-2' %>
+            <%= test_case_form.text_area :input, class: 'w-full px-3 py-2 border rounded', rows: 3 %>
+          </div>
+          <div class="mb-4">
+            <%= test_case_form.label :expected_output, class: 'block mb-2' %>
+            <%= test_case_form.text_area :expected_output, class: 'w-full px-3 py-2 border rounded', rows: 3 %>
+          </div>
+          <div class="mb-4 flex items-center">
+            <%= test_case_form.check_box :is_hidden, class: 'mr-2' %>
+            <%= test_case_form.label :is_hidden, 'Hidden Test Case', class: 'select-none' %>
+          </div>
+        <% end %>
+      </div>
+
+      <div>
+        <h3 class="text-xl font-semibold mb-4">Solution</h3>
+        <%= form.fields_for :solution do |solution_form| %>
+          <div class="mb-4">
+            <%= solution_form.label :code, class: 'block mb-2' %>
+            <%= solution_form.text_area :code, class: 'code-editor', rows: 5 %>
+          </div>
+          <div class="mb-4">
+            <%= solution_form.label :time_complexity, class: 'block mb-2' %>
+            <%= solution_form.text_field :time_complexity, class: 'w-full px-3 py-2 border rounded' %>
+          </div>
+          <div class="mb-4">
+            <%= solution_form.label :space_complexity, class: 'block mb-2' %>
+            <%= solution_form.text_field :space_complexity, class: 'w-full px-3 py-2 border rounded' %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div>
+      <h3 class="text-xl font-semibold mb-4">Hints</h3>
+      <%= form.fields_for :hints do |hint_form| %>
+        <div class="mb-4">
+          <%= hint_form.label :content, class: 'block mb-2' %>
+          <%= hint_form.text_area :content, class: 'w-full px-3 py-2 border rounded', rows: 3 %>
+        </div>
+        <div class="mb-4">
+          <%= hint_form.label :order_number, class: 'block mb-2' %>
+          <%= hint_form.number_field :order_number, class: 'w-full px-3 py-2 border rounded' %>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="actions">
+      <%= form.submit 'Save Problem', class: 'bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600' %>
+    </div>
+  <% end %>
+</div>

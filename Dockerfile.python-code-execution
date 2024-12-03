@@ -1,0 +1,26 @@
+FROM python:3.9-slim
+
+# Install any necessary dependencies
+RUN pip install --no-cache-dir \
+    numpy \
+    pandas
+
+# Set working directory
+WORKDIR /code
+
+# Ensure the /code directory has correct permissions
+RUN chmod 777 /code
+
+# Create a non-root user for security
+RUN useradd -m -s /bin/bash -g root coderunner
+
+# Set proper permissions for entrypoint
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+RUN chown coderunner:root /entrypoint.sh /code
+
+# Switch to non-root user
+USER root
+
+# Entrypoint script to handle code execution
+ENTRYPOINT ["/entrypoint.sh"]

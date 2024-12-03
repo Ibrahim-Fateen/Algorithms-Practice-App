@@ -13,4 +13,15 @@ class Problem < ApplicationRecord
   enum difficulty: { easy: 'Easy', medium: 'Medium', hard: 'Hard' }
 
   scope :current_week, -> { where(week: Week.current) }
+
+  accepts_nested_attributes_for :hints,
+                                reject_if: :all_blank,
+                                allow_destroy: true
+
+  accepts_nested_attributes_for :test_cases,
+                                reject_if: :all_blank,
+                                allow_destroy: true
+
+  accepts_nested_attributes_for :solution,
+                                reject_if: :all_blank
 end

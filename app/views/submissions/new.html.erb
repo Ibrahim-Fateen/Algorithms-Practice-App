@@ -12,7 +12,7 @@
   <%= form_with(model: [@problem, @submission], local: true) do |f| %>
     <div class="bg-white rounded-lg shadow p-6">
       <%= f.text_area :code,
-                      id: 'code-editor',
+                      class: 'code-editor',
                       value: @submission.code || @problem.template_code %>
 
       <div class="mt-4">

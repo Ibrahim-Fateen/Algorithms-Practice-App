@@ -10,4 +10,11 @@ Rails.application.routes.draw do
   end
 
   resources :submissions, only: [:show]
+
+  namespace :admin do
+    resources :problems
+    resources :weeks
+    resources :users
+  end
 end
+

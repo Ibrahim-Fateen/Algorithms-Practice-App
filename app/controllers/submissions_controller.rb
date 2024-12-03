@@ -18,10 +18,10 @@ class SubmissionsController < ApplicationController
 
     if @submission.save
       # We'll implement the code execution service later
-      # CodeExecutionJob.perform_later(@submission.id)
+      CodeExecutionJob.perform_later(@submission.id)
 
       respond_to do |format|
-        format.html { redirect_to problem_path(@problem), notice: 'Solution submitted successfully!' }
+        format.html { redirect_to problems_path(@problem), notice: 'Solution submitted successfully!' }
         format.json { render json: {
           status: @submission.status,
           message: 'Solution submitted successfully!'

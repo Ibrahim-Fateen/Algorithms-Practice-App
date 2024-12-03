@@ -19,6 +19,9 @@ gem 'tailwindcss-rails'
 # Authentication and Authorization
 gem 'devise'
 
+gem 'docker-api'
+gem 'sidekiq'
+
 # Reduces boot times through caching
 gem 'bootsnap', require: false
 

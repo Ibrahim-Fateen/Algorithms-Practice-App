@@ -4,4 +4,8 @@ class User < ApplicationRecord
 
   has_many :submissions
   has_many :problems, through: :submissions
+
+  def admin?
+    admin == true
+  end
 end
