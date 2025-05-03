@@ -1,41 +1,55 @@
-# app/controllers/admin/weeks_controller.rb
 module Admin
   class WeeksController < ApplicationController
     before_action :authenticate_user!
     before_action :require_admin
-    before_action :set_week, only: [:edit, :update, :destroy]
+    before_action :set_week, only: [:update, :destroy, :publish]
 
     def index
       @weeks = Week.order(number: :asc)
-    end
-
-    def new
-      @week = Week.new
+      render json: @weeks, each_serializer: WeekSerializer
     end
 
     def create
       @week = Week.new(week_params)
       if @week.save
-        redirect_to admin_weeks_path, notice: 'Week created successfully.'
+        render json: @week, serializer: WeekSerializer
       else
-        render :new
+        render json: { error: 'Failed to create week' }, status: :unprocessable_entity
       end
-    end
-
-    def edit
     end
 
     def update
       if @week.update(week_params)
-        redirect_to admin_weeks_path, notice: 'Week updated successfully.'
+        render json: @week, serializer: WeekSerializer
       else
-        render :edit
+        render json: { error: 'Failed to update week' }, status: :unprocessable_entity
       end
     end
 
     def destroy
-      @week.destroy
-      redirect_to admin_weeks_path, notice: 'Week deleted successfully.'
+      if @week.destroy
+        render json: { message: 'Week deleted successfully.' }
+      else
+        render json: { error: 'Failed to delete week' }, status: :unprocessable_entity
+      end
+    end
+
+    def publish
+      if @week.publish!
+        render json: @week, serializer: WeekSerializer
+      else
+        render json: { error: 'Failed to publish week' }, status: :unprocessable_entity
+      end
+    end
+
+    def upcoming
+      @weeks = Week.upcoming
+      render json: @weeks, each_serializer: WeekSerializer
+    end
+
+    def past
+      @weeks = Week.past
+      render json: @weeks, each_serializer: WeekSerializer
     end
 
     private

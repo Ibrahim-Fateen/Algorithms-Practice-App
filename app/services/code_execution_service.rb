@@ -10,9 +10,6 @@ class CodeExecutionService
   end
 
   def execute
-    # Prepare test cases
-    # test_cases = prepare_test_cases
-
     # Create temporary files for code and tests
     submission_file = write_code_to_file(@submission.code, 'submission_solution.py')
     solution_file = write_code_to_file(@solution.code, 'reference_solution.py')
@@ -27,22 +24,6 @@ class CodeExecutionService
   end
 
   private
-
-  def prepare_test_cases
-    # Retrieve test cases, including dynamically generated ones
-    problem_test_cases = TestCase.for_problem(@problem)
-    generated_test_cases = generate_stress_test_cases
-
-    # Combine both sets of test cases
-    problem_test_cases + generated_test_cases
-  end
-
-  def generate_stress_test_cases
-    # Assuming there's a method in the Problem model or a separate service
-    Rails.logger.info("Generating stress test cases for problem ##{@problem.id}")
-    stress_test_generator = StressTestGenerator.new(@problem)
-    stress_test_generator.generate_test_cases
-  end
 
   def write_code_to_file(code, filename)
     # Write code to a temporary file
@@ -116,15 +97,6 @@ if __name__ == '__main__':
     else
       Rails.logger.error("File does not exist")
     end
-    # File.write(test_script_path, test_script)
-
-    # Write test cases to JSON
-    # test_cases_json_path = "/tmp/test_cases.json"
-    # File.open(test_cases_json_path, 'w', 0644) do |f|
-    #   f.write(test_cases.to_json)
-    # end
-    # # File.write(test_cases_json_path, test_cases.to_json)
-    # Rails.logger.error(Dir.pwd)
 
     test_script_path
   end

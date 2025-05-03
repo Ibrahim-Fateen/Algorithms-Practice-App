@@ -1,9 +1,11 @@
 class Problem < ApplicationRecord
   belongs_to :week
-  has_many :submissions
-  has_many :test_cases
-  has_many :hints
-  has_one :solution
+  has_many :submissions, dependent: :destroy
+  has_many :test_cases, dependent: :destroy
+  has_many :hints, dependent: :destroy
+  has_one :solution, dependent: :destroy
+
+  attr_accessor :global_trials, :global_passed
 
   validates :title, presence: true
   validates :description, presence: true

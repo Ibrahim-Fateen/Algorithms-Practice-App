@@ -2,42 +2,42 @@ module Admin
   class ProblemsController < ApplicationController
     before_action :authenticate_user!
     before_action :require_admin
-    before_action :set_problem, only: [:edit, :update, :destroy]
+    before_action :set_problem, only: [:edit, :update, :destroy, :edit]
 
     def index
       @problems = Problem.all
-    end
-
-    def new
-      @problem = Problem.new
-      @problem.hints.build
-      @problem.test_cases.build
-      @problem.build_solution
+      render json: @problems, each_serializer: ProblemSerializer, current_user: current_user
     end
 
     def create
       @problem = Problem.new(problem_params)
       if @problem.save
-        redirect_to admin_problems_path, notice: 'Problem created successfully.'
+        render json: @problem
+      end
+    end
+
+    def update
+      @problem.hints.destroy_all
+      @problem.test_cases.destroy_all
+      @problem.solution&.destroy
+
+      if @problem.update(problem_params)
+        render json: @problem
       else
-        render :new
+        render json: { errors: @problem.errors.full_messages }, status: :unprocessable_entity
       end
     end
 
     def edit
-    end
-
-    def update
-      if @problem.update(problem_params)
-        redirect_to admin_problems_path, notice: 'Problem updated successfully.'
-      else
-        render :edit
-      end
+      render json: @problem
     end
 
     def destroy
-      @problem.destroy
-      redirect_to admin_problems_path, notice: 'Problem deleted successfully.'
+      if @problem.destroy
+        render json: { message: 'Problem deleted successfully.' }
+      else
+        render json: { errors: @problem.errors.full_messages }, status: :unprocessable_entity
+      end
     end
 
     private

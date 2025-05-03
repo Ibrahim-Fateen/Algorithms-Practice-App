@@ -6,5 +6,6 @@ class DashboardController < ApplicationController
                                    .where(status: :passed)
                                    .select('DISTINCT problem_id')
                                    .count
+    render json: { submissions: @submissions, solved_problems: @solved_problems }
   end
 end

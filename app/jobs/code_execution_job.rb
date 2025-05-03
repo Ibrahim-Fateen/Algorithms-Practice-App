@@ -11,3 +11,4 @@ class CodeExecutionJob < ApplicationJob
     Rails.logger.error("Submission execution error: #{e.message}")
   end
 end
+

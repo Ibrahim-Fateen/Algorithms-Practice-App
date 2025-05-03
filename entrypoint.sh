@@ -23,4 +23,4 @@ chown coderunner:root submission_solution.py stress_tests_generation.py run_test
 
 # Run tests with timeout and resource constraints
 #timeout 5s python3 -m pytest test_cases.py
-python run_tests.py
+python -u run_tests.py

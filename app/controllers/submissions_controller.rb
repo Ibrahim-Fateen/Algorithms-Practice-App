@@ -2,13 +2,9 @@ class SubmissionsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_problem, only: [:new, :create]
 
-  def new
-    @submission = current_user.submissions.build(problem: @problem)
-    # Get the previous submission if it exists
-    @previous_submission = current_user.submissions
-                                       .where(problem: @problem)
-                                       .order(created_at: :desc)
-                                       .first
+  def index
+    @submissions = current_user.submissions.order(created_at: :desc)
+    render json: @submissions, each_serializer: SubmissionSerializer
   end
 
   def create
@@ -17,26 +13,16 @@ class SubmissionsController < ApplicationController
     @submission.status = 'pending'
 
     if @submission.save
-      # We'll implement the code execution service later
       CodeExecutionJob.perform_later(@submission.id)
-
-      respond_to do |format|
-        format.html { redirect_to problems_path(@problem), notice: 'Solution submitted successfully!' }
-        format.json { render json: {
-          status: @submission.status,
-          message: 'Solution submitted successfully!'
-        } }
-      end
+      render json: @submission
     else
-      respond_to do |format|
-        format.html { render :new }
-        format.json { render json: @submission.errors, status: :unprocessable_entity }
-      end
+      render json: { errors: @submission.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
   def show
     @submission = current_user.submissions.find(params[:id])
+    render json: @submission, serializer: SubmissionSerializer
   end
 
   private

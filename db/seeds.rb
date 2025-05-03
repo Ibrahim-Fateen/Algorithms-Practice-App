@@ -10,7 +10,8 @@ admin = User.create!(
   email: 'admin@example.com',
   password: 'password123',
   password_confirmation: 'password123',
-  admin: true
+  admin: true,
+  nickname: 'Abo_Khaleel'
 )
 
 # Create regular user
@@ -18,7 +19,8 @@ puts "Creating test user..."
 user = User.create!(
   email: 'user@example.com',
   password: 'password123',
-  password_confirmation: 'password123'
+  password_confirmation: 'password123',
+  nickname: 'TestUser'
 )
 
 # Create weeks
@@ -31,6 +33,7 @@ weeks = []
                'Dynamic Programming', 'Recursion', 'Sorting & Searching',
                'Stacks & Queues', 'Heaps', 'Greedy Algorithms',
                'Backtracking', 'Bit Manipulation', 'System Design'].at(i)}",
+    posted: i < 7,
     )
 end
 
@@ -41,8 +44,13 @@ problem_templates = [
     description: "Given an array of integers `nums` and an integer `target`, return indices of two numbers in the array that add up to the target. You may assume each input has exactly one solution.",
     difficulty_level: "Easy",
     solution_template: """def solution(nums, target):
-    # Your solution here
-    pass""",
+    seen = {}
+    for i, num in enumerate(nums):
+        complement = target - num
+        if complement in seen:
+            return [seen[complement], i]
+        seen[num] = i
+    return [-1, -1]""",
     solution_code: """def solution(nums, target):
     seen = {}
     for i, num in enumerate(nums):
@@ -50,7 +58,7 @@ problem_templates = [
         if complement in seen:
             return [seen[complement], i]
         seen[num] = i
-    return []""",
+    return [-1, -1]""",
     stress_test_code: """import random
 import itertools
 def generate_test_cases():
